@@ -25,18 +25,25 @@ func errorExit(msg string, err error) {
 func main() {
 	fmt.Println("this is phlox language\n")
 
-	fmt.Println(LeftParen)
-
 	switch len(os.Args) {
 	case 2:
-		f, err := os.ReadFile(os.Args[1])
+		b, err := os.ReadFile(os.Args[1])
 		if err != nil {
 			errorExit("could not read file", err)
 		}
 
-		// todo: runfile
+		sc := NewScanner(string(b))
 
-		fmt.Println(len(string(f)))
+		err = sc.Scan()
+		if err != nil {
+			errorExit("scan error", err)
+		}
+		fmt.Println("scan is done")
+		for _, v := range sc.Tokens {
+			fmt.Printf("token: %q\n", v.Type)
+		}
+
+		fmt.Println("conten length: ", len(string(b)))
 
 		return
 	case 1:

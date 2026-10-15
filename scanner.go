@@ -75,6 +75,19 @@ func (s *Scanner) Scan() error {
 		} else {
 			s.Tokens = append(s.Tokens, NewToken(Less, "", "", s.line))
 		}
+	case '/':
+		if s.peekchar() == '/' {
+			for {
+				cha := s.nextchar()
+				if cha == '\n' || cha == 0 {
+					break
+				}
+			}
+
+			// this is a comment just forward until new line or eof
+		} else {
+			s.Tokens = append(s.Tokens, NewToken(Slash, "", "", s.line))
+		}
 	default:
 		fmt.Println(fmt.Errorf("unexpected char %q", ch))
 	}
