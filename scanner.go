@@ -52,13 +52,29 @@ func (s *Scanner) Scan() error {
 		s.Tokens = append(s.Tokens, NewToken(Star, "", "", s.line))
 	// operators
 	case '!':
-		s.Tokens = append(s.Tokens, NewToken(Bang, "", "", s.line))
+		if s.match('=') {
+			s.Tokens = append(s.Tokens, NewToken(BangEqual, "", "", s.line))
+		} else {
+			s.Tokens = append(s.Tokens, NewToken(Bang, "", "", s.line))
+		}
 	case '=':
-		s.Tokens = append(s.Tokens, NewToken(Equal, "", "", s.line))
+		if s.match('=') {
+			s.Tokens = append(s.Tokens, NewToken(EqualEqual, "", "", s.line))
+		} else {
+			s.Tokens = append(s.Tokens, NewToken(Equal, "", "", s.line))
+		}
 	case '>':
-		s.Tokens = append(s.Tokens, NewToken(Greater, "", "", s.line))
+		if s.match('=') {
+			s.Tokens = append(s.Tokens, NewToken(GreaterEqual, "", "", s.line))
+		} else {
+			s.Tokens = append(s.Tokens, NewToken(Greater, "", "", s.line))
+		}
 	case '<':
-		s.Tokens = append(s.Tokens, NewToken(Less, "", "", s.line))
+		if s.match('=') {
+			s.Tokens = append(s.Tokens, NewToken(LessEqual, "", "", s.line))
+		} else {
+			s.Tokens = append(s.Tokens, NewToken(Less, "", "", s.line))
+		}
 	default:
 		fmt.Println(fmt.Errorf("unexpected char %q", ch))
 	}
@@ -69,17 +85,22 @@ func (s *Scanner) Scan() error {
 }
 
 func (s *Scanner) peekchar() rune {
-	if s.current+1 >= len(s.input) {
+	if s.current >= len(s.input) {
 		return 0
 	}
 
-	return rune(s.input[s.current+1])
+	return rune(s.input[s.current])
 }
 
 func (s *Scanner) match(r rune) bool {
 	r2 := s.peekchar()
+	if r2 == 0 || r2 != r {
+		return false
+	}
 
-	return r2 != 0 && rune(r2) == r
+	s.current++
+
+	return true
 }
 
 func (s *Scanner) nextchar() rune {
