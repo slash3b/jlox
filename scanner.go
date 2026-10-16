@@ -99,13 +99,45 @@ func (s *Scanner) Scan() error {
 		case '"':
 			s.string()
 		default:
-			fmt.Println(fmt.Errorf("unexpected char %q", ch))
+			if s.isdigit(ch) {
+				s.digit()
+			} else {
+				fmt.Println(fmt.Errorf("unexpected char %q", ch))
+			}
+
 		}
 	}
 
 	s.Tokens = append(s.Tokens, NewToken(EOF, "", "", s.line))
 
 	return nil
+}
+
+// ======================== helpers below ===============================
+
+func (s *Scanner) isdigit(ch rune) bool {
+	return (ch >= '0' && ch <= '9') || ch == '.'
+}
+
+func (s *Scanner) digit() {
+	str := string(s.input[s.current-1])
+
+	for {
+		if s.isend() {
+			break
+		}
+
+		ch := s.nextchar()
+
+		if !s.isdigit(ch) {
+			s.current--
+			break
+		}
+
+		str += string(ch)
+	}
+
+	s.Tokens = append(s.Tokens, NewToken(Number, str, str, s.line))
 }
 
 func (s *Scanner) string() {
