@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 type Scanner struct {
 	input   string
@@ -137,7 +140,13 @@ func (s *Scanner) digit() {
 		str += string(ch)
 	}
 
-	s.Tokens = append(s.Tokens, NewToken(Number, str, str, s.line))
+	// lit is the 3-rd param
+	lit, err := strconv.ParseFloat(str, 64)
+	if err != nil {
+		panic("attempted to parse float " + str + err.Error())
+	}
+
+	s.Tokens = append(s.Tokens, NewToken(Number, str, lit, s.line))
 }
 
 func (s *Scanner) string() {

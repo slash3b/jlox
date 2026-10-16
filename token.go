@@ -54,11 +54,11 @@ const (
 type Token struct {
 	Type    TokenType
 	Lexeme  string
-	Literal string
+	Literal any // an actual value
 	Line    int
 }
 
-func NewToken(t TokenType, lex, lit string, line int) Token {
+func NewToken(t TokenType, lex string, lit any, line int) Token {
 	return Token{
 		Type:    t,
 		Lexeme:  lex,

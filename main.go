@@ -41,7 +41,7 @@ func main() {
 
 		fmt.Println("scan is done")
 		for _, v := range sc.Tokens {
-			fmt.Printf("token: %q %q %q\n", v.Type, v.Lexeme, v.Literal)
+			fmt.Printf("token: %q %q %v\n", v.Type, v.Lexeme, v.Literal)
 		}
 
 		fmt.Println("conten length: ", len(string(b)))
