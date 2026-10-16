@@ -1,3 +1,3 @@
 .PHONY: fmt
 fmt:
-	gofumpt -w .
+	@gofumpt -w .

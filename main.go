@@ -38,9 +38,10 @@ func main() {
 		if err != nil {
 			errorExit("scan error", err)
 		}
+
 		fmt.Println("scan is done")
 		for _, v := range sc.Tokens {
-			fmt.Printf("token: %q\n", v.Type)
+			fmt.Printf("token: %q %q %q\n", v.Type, v.Lexeme, v.Literal)
 		}
 
 		fmt.Println("conten length: ", len(string(b)))
